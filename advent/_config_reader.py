@@ -1,15 +1,23 @@
 from __future__ import annotations
 
 from enum import UNIQUE, Enum, EnumMeta, verify
-from os import PathLike
+from os import PathLike, environ
 from pathlib import Path
 from tomllib import load, loads
 from typing import Callable, KeysView, TypeVar, ValuesView
 
 from _pedantics import check_if_can_be_well_formatted
+from dotenv import dotenv_values, load_dotenv
 from platformdirs import user_data_dir, user_data_path
 
 _CT = TypeVar("_CT", bound="Configuration")
+
+
+def get_session_token() -> str:
+    env = dotenv_values() | environ
+    if "AOC_SESSION" in env and env["AOC_SESSION"]:
+        return env["AOC_SESSION"]
+    raise ValueError("No session token found in environment variables or .env file")
 
 
 class UnformattedPath:
@@ -17,7 +25,7 @@ class UnformattedPath:
         check_if_can_be_well_formatted(path, "year", "day")
         self.unformatted_path = path
 
-    def format_with_date(self, year: int, day: int):
+    def format_with_date(self, year: int, day: int) -> Path:
         return Path(self.unformatted_path.format(year=year, day=day))
 
     @staticmethod
@@ -25,9 +33,9 @@ class UnformattedPath:
         path = Path()
         for p in paths:
             if isinstance(p, UnformattedPath):
-                path /= p.format_with_date(year=year, day=day)
-                continue
-            path /= p
+                path = path / p.format_with_date(year=year, day=day)
+            else:
+                path = path / Path(p)
         return path
 
 
@@ -38,7 +46,7 @@ class SupportedConfigurationFormats(Enum):
 
 
 class Configuration:
-    DEFAULTS = {"DATA_PATH": (user_data_dir(appname="advent-tools"), UnformattedPath("/data/{year}/{date}.txt"))}
+    DEFAULTS = {"DATA_PATH": (user_data_dir(appname="advent-tools"), UnformattedPath("data/{year}/{day}.txt"))}
 
     def __init__(self, file: Path, format: SupportedConfigurationFormats):
         self._config = self.DEFAULTS
@@ -69,4 +77,4 @@ class Configuration:
         raise FileNotFoundError(f"Could not find any of the supported configuration files: {supported} in {base_path}")
 
 
-print(Configuration.from_supported_configuration(Path.cwd()))
+CONFIGURATION = Configuration.from_supported_configuration(Path.cwd(), SupportedConfigurationFormats)
