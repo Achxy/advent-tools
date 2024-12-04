@@ -1,0 +1,27 @@
+[project]
+name = "advent-tools"
+version = "0.1.0"
+description = "Cool set of tools for working with Advent of Code challenges"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiofiles>=24.1.0",
+    "aiohttp>=3.11.9",
+    "platformdirs>=4.3.6",
+]
+
+[project.scripts]
+advent = "adventtools.__main__:main"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.uv]
+package = true
