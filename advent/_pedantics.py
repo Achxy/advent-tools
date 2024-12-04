@@ -22,7 +22,7 @@ def check_if_can_be_well_formatted(unformatted: str, *args: str):
     # Make sure side-effectless
     check_type("unformatted", unformatted, str, strict=True)
     try:
-        unformatted.format({i: "" for i in args})
+        unformatted.format(**{i: str() for i in args})
     except KeyError as exc:
         raise ValueError(f"Unformatted string has missing keys (string: {unformatted})") from exc
     except IndexError as exc:
