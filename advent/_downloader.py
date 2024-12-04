@@ -1,25 +1,19 @@
-from pathlib import Path
-
-import aiofiles
-import aiohttp
+import requests
+from _pedantics import check_if_viable_date
 
 
 class Downloader:
     URL_FORMAT = "https://adventofcode.com/{year}/day/{day}/input"
 
-    def __init__(self, *, session_cookie: str):
-        self.session = aiohttp.ClientSession(cookies={"session": session_cookie})
+    def __init__(self, session_cookie: str) -> None:
+        self.cookies = {"session": session_cookie}
 
-    async def download_input_for_date(self, year: int, day: int, path: Path, overwrite: bool = False):
-        if not overwrite and path.is_file():
-            return
-        url = f"https://adventofcode.com/{year}/day/{day}"
-        return await self.download(url.format(year=year, day=day), path)
+    def get_content_for_date(self, year: int, day: int) -> str:
+        check_if_viable_date(year=year, day=day)
+        url = self.URL_FORMAT.format(year=year, day=day)
+        return self.get_content(url)
 
-    async def download(self, url: str, path: Path):
-        async with self.session.get(url) as response:
-            async with aiofiles.open(path, "wt") as file:
-                await file.write((await response.read()).decode("utf-8"))
-
-    async def close(self):
-        await self.session.close()
+    def get_content(self, url: str) -> str:
+        req = requests.get(url, cookies=self.cookies)
+        req.raise_for_status()
+        return req.text
