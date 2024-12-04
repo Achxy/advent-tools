@@ -4,31 +4,35 @@ from functools import partial
 from typing import Any, Callable
 
 from _config_reader import Configuration
-from _pedantics import check_if_viable_date
+from _pedantics import check_if_viable_date, not_both_provided_but_one
 
 from advent._data_handle import get, get_example_data, getch
-
+from _typeshack import FakeGenericForGetItemSupport
 
 class _InstantiatorFromSlice(type):
     def __getitem__(self, date: slice[int, int, None]) -> Callable[..., type]:
         if date.step is not None:
             name = self.__name__
             raise ValueError(f"Please instantiate in following format {name}[YEAR:DAY]")
-        return partial(self, year=date.start, day=date.stop)
+        self.__year__: int = date.start
+        self.__day__: int = date.stop
+        return self
 
 
-class Advent(metaclass=_InstantiatorFromSlice):
+class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
     def __init_subclass__(
-        cls, *, year: int, day: int, autorun: bool = True, example: bool = False, offline: bool = False, **kwargs
+        cls, *, year: int | None = None, day: int | None = None, autorun: bool = True, example: bool = False, offline: bool = False, **kwargs
     ):
+        _year: int = not_both_provided_but_one(year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax")
+        _day: int = not_both_provided_but_one(day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax")
         if autorun:
             if example:
-                return cls(get_example_data(year, day)).run_solutions()
+                return cls(get_example_data(_year, _day)).run_solutions()
             if offline:
-                if (data := get(year, day)) is not None:
+                if (data := get(_year, _day)) is not None:
                     return cls(data).run_solutions()
                 raise ValueError(f"No offline data found for year {year}, day {day}")
-            return cls(getch(year, day)).run_solutions()
+            return cls(getch(_year, _day)).run_solutions()
 
     def __init__(self, data: str) -> None:
         pass
@@ -44,13 +48,6 @@ class Advent(metaclass=_InstantiatorFromSlice):
         return NotImplemented
 
 
-class Foo(metaclass=_InstantiatorFromSlice):
-    def __init__(self, *, year: int, day: int, test: bool = False):
-        self.year = year
-        self.day = day
-
-    def say(self):
-        print(f"Year: {self.year}, Day: {self.day}")
-
-
-Foo[2021:1]().say()
+class Foo(Advent[2021:1]):
+    def __init__(self, data: str) -> None:
+        print(data.splitlines()[0])
