@@ -34,9 +34,9 @@ class UnformattedPath:
         path = Path()
         for p in paths:
             if isinstance(p, UnformattedPath):
-                path = path / p.format_with_date(year=year, day=day)
+                path /= p.format_with_date(year=year, day=day)
             else:
-                path = path / Path(p)
+                path /= Path(p)
         return path
 
 
@@ -73,7 +73,6 @@ class Configuration:
         supported = {supportedfile.value: key for key, supportedfile in format.__members__.items()}
         for file in base_path.iterdir():
             if file.name in supported:
-                print(f"Found {file.name}")
                 return cls(file, format[supported[file.name]])
         raise FileNotFoundError(f"Could not find any of the supported configuration files: {supported} in {base_path}")
 
