@@ -13,6 +13,21 @@ py -3 -m pip install -U advent-tools
 ```
 
 ### Quickstart
+First we need to get the `session` cookie (🍪), in order to do that
+1) Open your broswer's Devtools ([Chrome](https://developer.chrome.com/docs/devtools/open) / https://firefox-source-docs.mozilla.org/devtools-user/ guide)
+2) Head on over to `Application` tab, then to `Cookies`
+3) Find and copy `session` cookie value
+!["Steps to get session cookie"](./assets/steps_to_get_session_cookie.jpg)
+4.A) set `AOC_SESSION=<session-cookie-value>` environment variable (make sure terminal restart doesn't reset the value)
+**OR**
+4.B)
+```bash
+# Same for all Windows, Linux and macOS
+echo AOC_SESSION=<session-cookie-value> > .env
+# Make sure to replace <session-cookie-value> with your cookie value
+```
+Make sure version control system ignores your token container cause your token is sensitive and can be used for log-ins.
+
 `year` and `day` can be given as kwargs when subclassing `advent.Advent` or can be provided using it's `__getitem__` behaviour like `Advent[year:day]`
 ```py
 from advent import Advent
