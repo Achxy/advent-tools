@@ -10,8 +10,6 @@ dependencies = [
     "requests>=2.32.3",
 ]
 
-[project.scripts]
-advent = "adventtools.__main__:main"
 
 [tool.pyright]
 venvPath = "."
