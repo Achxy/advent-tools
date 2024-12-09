@@ -10,11 +10,11 @@ MAX_AOC_DAYS = 25
 UTC_5 = timezone(timedelta(hours=-5))
 now = partial(datetime.now, tz=UTC_5)
 
-def not_both_provided_but_one(a: _T | None, b: _T2 | None, msg: str ="Provide exactly one value") -> _T | _T2:
+
+def not_both_provided_but_one(a: _T | None, b: _T2 | None, msg: str = "Provide exactly one value") -> _T | _T2:
     if (a is None) is (b is None):
         raise ValueError(msg)
-    return a if a is not None else b # type: ignore (typecheckers don't understand this)
-
+    return a if a is not None else b  # type: ignore (typecheckers don't understand this)
 
 
 def check_type(varname: str, value: Any, expected: type[_T], strict: bool = False) -> _T:
