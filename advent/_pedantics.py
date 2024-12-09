@@ -69,5 +69,5 @@ def check_if_viable_date(year: int, day: int):
         raise ValueError(f"Day {day} is in the future, current available day is {current_day}")
     if not now() >= datetime(year, 12, day, tzinfo=UTC_5):
         delta = datetime(year, 12, day, tzinfo=UTC_5) - now()
-        fmt = f"{delta.seconds // 3600} hours, {(delta.seconds // 60) % 60} minutes"
+        fmt = f"{delta.seconds // 3600} hours, {(delta.seconds // 60) % 60} minutes and {delta.seconds % 60} seconds"
         raise ValueError(f"Advent of Code for day {day} has not started yet ({fmt} left)")
