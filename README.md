@@ -14,7 +14,7 @@ py -3 -m pip install -U advent-tools
 
 ### Quickstart
 First we need to get the `session` cookie (🍪), in order to do that
-1) Open your broswer's Devtools ([Chrome](https://developer.chrome.com/docs/devtools/open) / https://firefox-source-docs.mozilla.org/devtools-user/ guide)
+1) Open your broswer's Devtools ([Chrome](https://developer.chrome.com/docs/devtools/open) / [Firefox](https://firefox-source-docs.mozilla.org/devtools-user/) guide)
 2) Head on over to `Application` tab, then to `Cookies`
 3) Find and copy `session` cookie value
 !["Steps to get session cookie"](./assets/steps_to_get_session_cookie.jpg)
