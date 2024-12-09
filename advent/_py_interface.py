@@ -5,26 +5,41 @@ from typing import Any, Callable
 
 from _config_reader import Configuration
 from _pedantics import check_if_viable_date, not_both_provided_but_one
-
-from advent._data_handle import get, get_example_data, getch
 from _typeshack import FakeGenericForGetItemSupport
 
+from advent._data_handle import get, get_example_data, getch
+
+
 class _InstantiatorFromSlice(type):
+    __year__: int | None = None
+    __day__: int | None = None
+
     def __getitem__(self, date: slice[int, int, None]) -> Callable[..., type]:
         if date.step is not None:
             name = self.__name__
             raise ValueError(f"Please instantiate in following format {name}[YEAR:DAY]")
-        self.__year__: int = date.start
-        self.__day__: int = date.stop
+        self.__year__ = date.start
+        self.__day__ = date.stop
         return self
 
 
 class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
     def __init_subclass__(
-        cls, *, year: int | None = None, day: int | None = None, autorun: bool = True, example: bool = False, offline: bool = False, **kwargs
+        cls,
+        *,
+        year: int | None = None,
+        day: int | None = None,
+        autorun: bool = True,
+        example: bool = False,
+        offline: bool = False,
+        **kwargs,
     ):
-        _year: int = not_both_provided_but_one(year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax")
-        _day: int = not_both_provided_but_one(day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax")
+        _year: int = not_both_provided_but_one(
+            year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax"
+        )
+        _day: int = not_both_provided_but_one(
+            day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax"
+        )
         if autorun:
             if example:
                 return cls(get_example_data(_year, _day)).run_solutions()
@@ -48,6 +63,6 @@ class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
         return NotImplemented
 
 
-class Foo(Advent[2021:1]):
+class Foo(Advent, year=2023, day=12):
     def __init__(self, data: str) -> None:
         print(data.splitlines()[0])
