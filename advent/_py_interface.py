@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Callable
 
-from _config_reader import Configuration
-from _pedantics import check_if_viable_date, not_both_provided_but_one
-from _typeshack import FakeGenericForGetItemSupport
-
-from advent._data_handle import get, get_example_data, getch
+from ._data_handle import get, get_example_data, getch
+from ._pedantics import not_both_provided_but_one
+from ._typeshack import FakeGenericForGetItemSupport
 
 
 class _InstantiatorFromSlice(type):
@@ -61,8 +58,3 @@ class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
 
     def part_2(self) -> Any:
         return NotImplemented
-
-
-class Foo(Advent, year=2023, day=12):
-    def __init__(self, data: str) -> None:
-        print(data.splitlines()[0])

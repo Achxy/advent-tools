@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-from enum import UNIQUE, Enum, EnumMeta, verify
+from enum import UNIQUE, Enum, verify
 from os import PathLike, environ
 from pathlib import Path
-from tomllib import load, loads
-from typing import Callable, KeysView, TypeVar, ValuesView
+from tomllib import loads
+from typing import TypeVar
 
-from _pedantics import check_if_can_be_well_formatted
-from dotenv import dotenv_values, load_dotenv
-from platformdirs import user_data_dir, user_data_path
+from dotenv import dotenv_values
+from platformdirs import user_data_dir
+
+from ._pedantics import check_if_can_be_well_formatted
 
 _CT = TypeVar("_CT", bound="Configuration")
 

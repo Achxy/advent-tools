@@ -1,5 +1,6 @@
 import requests
-from _pedantics import check_if_viable_date
+
+from ._pedantics import check_if_viable_date
 
 
 class Downloader:
