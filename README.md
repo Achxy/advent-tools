@@ -28,6 +28,7 @@ echo AOC_SESSION=<session-cookie-value> > .env
 ```
 Make sure version control system ignores your token container cause your token is sensitive and can be used for log-ins.
 
+### Usage
 `year` and `day` can be given as kwargs when subclassing `advent.Advent` or can be provided using it's `__getitem__` behaviour like `Advent[year:day]`
 ```py
 from advent import Advent
