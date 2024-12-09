@@ -40,9 +40,7 @@ def check_if_valid_year(year: int) -> int:
     check_type("year", year, int)
     current_year = now().year
     if year < START_OF_AOC_YEAR:
-        raise ValueError(
-            f"Current year is {current_year}, which is before the start of Advent of Code: {START_OF_AOC_YEAR}"
-        )
+        raise ValueError(f"Current year is {current_year}, which is before the start of Advent of Code: {START_OF_AOC_YEAR}")
     if year > now().year:
         raise ValueError(f"{year} is in the future, current year is {current_year}")
     return year
