@@ -20,6 +20,7 @@ First we need to get the `session` cookie (🍪), in order to do that
 !["Steps to get session cookie"](./assets/steps_to_get_session_cookie.jpg)
 4) set `AOC_SESSION=<session-cookie-value>` environment variable (make sure terminal restart doesn't reset the value)\
 **OR**
+Enter the following command in your terminal which will create an `.env` file storing your session cookie.
 ```bash
 # Same for all Windows, Linux and macOS
 echo AOC_SESSION=<session-cookie-value> > .env
