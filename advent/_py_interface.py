@@ -31,12 +31,9 @@ class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
         offline: bool = False,
         **kwargs,
     ):
-        _year: int = not_both_provided_but_one(
-            year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax"
-        )
-        _day: int = not_both_provided_but_one(
-            day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax"
-        )
+        msg = "Provide exactly one {arg} through subclass kwargs or getitem syntax"
+        _year: int = not_both_provided_but_one(year, cls.__year__, msg.format(arg="year"))
+        _day: int = not_both_provided_but_one(day, cls.__day__, msg.format(arg="day"))
         if autorun:
             if example:
                 return cls(get_example_data(_year, _day)).run_solutions()
