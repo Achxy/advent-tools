@@ -1,2 +1,2 @@
 # advent-tools
-Swiss knife for interacting and solving advent of code.
+Cool set of tools for working with Advent of Code challenges
