@@ -11,6 +11,7 @@ python3 -m pip install -U advent-tools
 # Windows
 py -3 -m pip install -U advent-tools
 ```
+
 ---
 ### Quickstart
 First we need to get the `session` cookie (🍪), in order to do that
@@ -26,7 +27,7 @@ Enter the following command in your terminal which will create an `.env` file st
 echo AOC_SESSION=<session-cookie-value> > .env
 # Make sure to replace <session-cookie-value> with your cookie value
 ```
-Make sure version control system ignores your token container cause your token is sensitive and can be used for log-ins.
+Make sure version control system ignores your token container in case you are using one, cause your token is sensitive and can be used for log-ins.
 
 ---
 ### Usage
