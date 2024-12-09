@@ -26,6 +26,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
+from ._benchmark import benchmark_and_print
 from ._data_handle import get, get_example_data, getch
 from ._pedantics import not_both_provided_but_one
 from ._typeshack import FakeGenericForGetItemSupport
@@ -71,8 +72,8 @@ class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
         pass
 
     def run_solutions(self):
-        self.part_1()
-        self.part_2()
+        benchmark_and_print(self.part_1)
+        benchmark_and_print(self.part_2)
 
     def part_1(self) -> Any:
         return NotImplemented
