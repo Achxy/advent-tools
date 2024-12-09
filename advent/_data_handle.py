@@ -4,7 +4,6 @@ from ._downloader import Downloader
 
 def get(year: int, day: int) -> str | None:
     fullpath = UnformattedPath.join_path(year, day, *CONFIGURATION.download_path())
-    print(fullpath)
     if fullpath.exists():
         return fullpath.read_text() or None
 
@@ -24,5 +23,5 @@ def getch(year: int, day: int) -> str:
     return fetch(year, day)
 
 
-def get_example_data(year: int, day: int):
-    return "..."
+def get_example_data(year: int, day: int) -> str:
+    raise NotImplementedError("Example data not implemented yet")
