@@ -60,7 +60,6 @@ def check_if_viable_date(year: int, day: int):
     check_if_valid_year(year)
     current_year, current_day = now().year, now().day
     is_december = now().month == 12
-    print(current_year, current_day, is_december)
     if year < current_year:
         return
     if not is_december:
