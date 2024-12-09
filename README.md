@@ -2,7 +2,7 @@
 Python interface to conveniently download and interact with advent data with a high-level-wrapper.
 
 ### Installation
-Note: A [Virtual Environment](https://docs.python.org/3/library/venv.html) is strongly recommended to install the library
+A [Virtual Environment](https://docs.python.org/3/library/venv.html) is strongly recommended to install the library
 
 ```bash
 # Linux/macOS
@@ -18,9 +18,8 @@ First we need to get the `session` cookie (🍪), in order to do that
 2) Head on over to `Application` tab, then to `Cookies`
 3) Find and copy `session` cookie value
 !["Steps to get session cookie"](./assets/steps_to_get_session_cookie.jpg)
-4.A) set `AOC_SESSION=<session-cookie-value>` environment variable (make sure terminal restart doesn't reset the value)
+4) set `AOC_SESSION=<session-cookie-value>` environment variable (make sure terminal restart doesn't reset the value)\
 **OR**
-4.B)
 ```bash
 # Same for all Windows, Linux and macOS
 echo AOC_SESSION=<session-cookie-value> > .env
