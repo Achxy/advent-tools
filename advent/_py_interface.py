@@ -29,7 +29,7 @@ from typing import Any, Callable
 from ._benchmark import benchmark_and_print
 from ._data_handle import get, get_example_data, getch
 from ._pedantics import not_both_provided_but_one
-from ._typeshack import FakeGenericForGetItemSupport
+from ._typeshack import FakeGenericForGetItemSupport, FakeType
 
 
 class _InstantiatorFromSlice(type):
@@ -45,7 +45,7 @@ class _InstantiatorFromSlice(type):
         return self
 
 
-class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
+class Advent(FakeGenericForGetItemSupport[FakeType], metaclass=_InstantiatorFromSlice):
     def __init_subclass__(
         cls,
         *,
@@ -54,7 +54,7 @@ class Advent(FakeGenericForGetItemSupport, metaclass=_InstantiatorFromSlice):
         autorun: bool = True,
         example: bool = False,
         offline: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ):
         msg = "Provide exactly one {arg} through subclass kwargs or getitem syntax"
         _year: int = not_both_provided_but_one(year, cls.__year__, msg.format(arg="year"))

@@ -23,7 +23,7 @@ SOFTWARE.
 """
 
 import time
-from typing import Callable, ParamSpec, TypeVar, reveal_type
+from typing import Callable, ParamSpec, TypeVar
 
 _R = TypeVar("_R")
 _P = ParamSpec("_P")

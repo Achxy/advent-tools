@@ -25,10 +25,10 @@ SOFTWARE.
 from __future__ import annotations
 
 from enum import UNIQUE, Enum, verify
-from os import PathLike, environ
+from os import environ
 from pathlib import Path
 from tomllib import loads
-from typing import TypeVar
+from typing import Any, TypeVar
 
 from dotenv import dotenv_values
 from platformdirs import user_data_dir
@@ -54,7 +54,7 @@ class UnformattedPath:
         return Path(self.unformatted_path.format(year=year, day=day))
 
     @staticmethod
-    def join_path(year: int, day: int, *paths: PathLike | UnformattedPath | str):
+    def join_path(year: int, day: int, *paths: UnformattedPath | str):
         path = Path()
         for p in paths:
             if isinstance(p, UnformattedPath):
@@ -74,11 +74,11 @@ class Configuration:
     DEFAULTS = {"DATA_PATH": (user_data_dir(appname="advent-tools"), UnformattedPath("data/{year}/{day}.txt"))}
 
     def __init__(self, file: Path, format: SupportedConfigurationFormats):
-        self._config = self.DEFAULTS
+        self._config: dict[str, Any] = self.DEFAULTS
         self._populate(file, format)
 
     def download_path(self) -> tuple[str | UnformattedPath, ...]:
-        ret = self._config["DATA_PATH"]
+        ret: str | tuple[str | UnformattedPath] = self._config["DATA_PATH"]
         if isinstance(ret, tuple):
             return ret
         return (ret,)

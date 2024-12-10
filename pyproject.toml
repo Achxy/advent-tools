@@ -35,8 +35,10 @@ exclude = [".venv/"]
 packages = ["advent/"]
 
 [tool.pyright]
-venvPath = "."
 venv = ".venv"
+venvPath = "."
+reportUnnecessaryTypeIgnoreComment = "warning"
+typeCheckingMode = "strict"
 
 [tool.black]
 line-length = 125
