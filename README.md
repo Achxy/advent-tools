@@ -18,7 +18,7 @@ First we need to get the `session` cookie (🍪), in order to do that
 1) Open your broswer's Devtools ([Chrome](https://developer.chrome.com/docs/devtools/open) / [Firefox](https://firefox-source-docs.mozilla.org/devtools-user/) guide)
 2) Head on over to `Application` tab, then to `Cookies`
 3) Find and copy `session` cookie value
-!["Steps to get session cookie"](./assets/steps_to_get_session_cookie.jpg)
+!["Steps to get session cookie"](https://gist.github.com/user-attachments/assets/716f7402-98f4-48c4-81b8-a39f0198c4c9)
 4) set `AOC_SESSION=<session-cookie-value>` environment variable (make sure terminal restart doesn't reset the value)\
 **OR**\
 Enter the following command in your terminal which will create an `.env` file storing your session cookie.
