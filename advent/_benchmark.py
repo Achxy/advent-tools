@@ -1,3 +1,4 @@
+"""
 MIT License
 
 Copyright (c) 2022-present Achyuth Jayadevan <achyuth@jayadevan.in>
@@ -19,3 +20,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+"""
+
+import time
+from typing import Callable, ParamSpec, TypeVar
+
+_R = TypeVar("_R")
+_P = ParamSpec("_P")
+
+
+def benchmark_and_print(func: Callable[_P, _R], *args: _P.args, **kwargs: _P.kwargs) -> _R:
+    start = time.perf_counter()
+    result = func(*args, **kwargs)
+    end = time.perf_counter()
+    print(f"{func.__name__} took {(end - start) * 1000:.6f} milliseconds and returned {result}")
+    return result
