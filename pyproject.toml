@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "advent-tools"
-version = "1.0.0a1"
+version = "1.0.0b1"
 authors = [{name ="Achyuth Jayadevan", email = "achyuth@jayadevan.in"}]
 description = "Cool set of tools for working with Advent of Code challenges"
 readme = "README.md"
