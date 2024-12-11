@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 from advent._pedantics import (
@@ -36,6 +38,7 @@ def test_check_if_valid_day():
     with pytest.raises(TypeError):
         check_if_valid_day("1")  # type: ignore
 
+
 def test_check_if_valid_year():
     assert check_if_valid_year(2015) == 2015
     assert check_if_valid_year(2022) == 2022
@@ -46,3 +49,12 @@ def test_check_if_valid_year():
         check_if_valid_year(2025)
     with pytest.raises(TypeError):
         check_if_valid_year("2022")  # type: ignore
+
+
+def test_check_if_viable_date():
+    # 8:00 AM UTC-5 on 15st Dec 2022
+    mock_datetime_1 = datetime(2022, 12, 15, 8, 0, 0, tzinfo=timezone(timedelta(hours=-5)))  # type: ignore
+    assert check_if_viable_date(2022, 1) is None
+    assert check_if_viable_date(2022, 25) is None
+    assert check_if_viable_date(2015, 6) is None
+    # TODO: Complete this (mock datetime.now() to return mock_datetime_1)
