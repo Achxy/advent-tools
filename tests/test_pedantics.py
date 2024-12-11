@@ -35,3 +35,14 @@ def test_check_if_valid_day():
         check_if_valid_day(-1)
     with pytest.raises(TypeError):
         check_if_valid_day("1")  # type: ignore
+
+def test_check_if_valid_year():
+    assert check_if_valid_year(2015) == 2015
+    assert check_if_valid_year(2022) == 2022
+    assert check_if_valid_year(2024) == 2024
+    with pytest.raises(ValueError):
+        check_if_valid_year(2014)
+    with pytest.raises(ValueError):
+        check_if_valid_year(2025)
+    with pytest.raises(TypeError):
+        check_if_valid_year("2022")  # type: ignore
