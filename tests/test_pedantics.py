@@ -78,3 +78,22 @@ def test_check_type():
         check_type("a", StrSub("1"), str, strict=True)
     with pytest.raises(TypeError):
         check_type("a", "1", StrSub)
+
+
+def test_not_both_provided_but_one():
+    assert not_both_provided_but_one(1, None) == 1
+    assert not_both_provided_but_one(None, 2) == 2
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(1, 2)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(1, 1)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(0, 0)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(False, False)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(True, True)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(None, None)
+    with pytest.raises(ValueError):
+        not_both_provided_but_one(1, 2, "Provide only one!!!")
