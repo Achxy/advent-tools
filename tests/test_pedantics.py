@@ -36,7 +36,7 @@ from advent._pedantics import (
 )
 
 
-def test_check_if_can_be_well_formatted():
+def test_check_if_can_be_well_formatted() -> None:
     assert check_if_can_be_well_formatted("{a}, lorem ipsum pq{b}rs", "a", "b") is None
     assert check_if_can_be_well_formatted("{a}{b}", "a", "b") is None
     assert check_if_can_be_well_formatted("{a b}", "a b") is None
@@ -49,7 +49,7 @@ def test_check_if_can_be_well_formatted():
         check_if_can_be_well_formatted("{} {a}, lorem ipsum pq{b}rs", "a", "b", "c")
 
 
-def test_check_if_valid_day():
+def test_check_if_valid_day() -> None:
     assert check_if_valid_day(1) == 1
     assert check_if_valid_day(25) == 25
     assert check_if_valid_day(13) == 13
@@ -63,7 +63,7 @@ def test_check_if_valid_day():
         check_if_valid_day("1")  # type: ignore
 
 
-def test_check_if_valid_year():
+def test_check_if_valid_year() -> None:
     assert check_if_valid_year(2015) == 2015
     assert check_if_valid_year(2022) == 2022
     assert check_if_valid_year(2024) == 2024
@@ -75,7 +75,7 @@ def test_check_if_valid_year():
         check_if_valid_year("2022")  # type: ignore
 
 
-def test_check_if_viable_date():
+def test_check_if_viable_date() -> None:
     # 8:00 AM UTC-5 on 15st Dec 2022
     mock_datetime_1 = datetime(2022, 12, 15, 8, 0, 0, tzinfo=timezone(timedelta(hours=-5)))  # type: ignore
     assert check_if_viable_date(2022, 1) is None
@@ -84,7 +84,7 @@ def test_check_if_viable_date():
     # TODO: Complete this (mock datetime.now() to return mock_datetime_1)
 
 
-def test_check_type():
+def test_check_type() -> None:
     class StrSub(str): ...
 
     assert check_type("a", 1, int) == 1
@@ -104,7 +104,7 @@ def test_check_type():
         check_type("a", "1", StrSub)
 
 
-def test_not_both_provided_but_one():
+def test_not_both_provided_but_one() -> None:
     assert not_both_provided_but_one(1, None) == 1
     assert not_both_provided_but_one(None, 2) == 2
     with pytest.raises(ValueError):
