@@ -51,11 +51,11 @@ def check_type(varname: str, value: Any, expected: type[_T], strict: bool = Fals
     return value
 
 
-def check_if_can_be_well_formatted(unformatted: str, *args: str):
+def check_if_can_be_well_formatted(unformatted: str, *args: str) -> None:
     # Make sure side-effectless
     check_type("unformatted", unformatted, str, strict=True)
     try:
-        unformatted.format(**{i: str() for i in args})
+        unformatted.format_map({i: str() for i in args})
     except KeyError as exc:
         raise ValueError(f"Unformatted string has missing keys (string: {unformatted})") from exc
     except IndexError as exc:
