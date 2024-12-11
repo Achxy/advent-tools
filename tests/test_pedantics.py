@@ -58,3 +58,23 @@ def test_check_if_viable_date():
     assert check_if_viable_date(2022, 25) is None
     assert check_if_viable_date(2015, 6) is None
     # TODO: Complete this (mock datetime.now() to return mock_datetime_1)
+
+
+def test_check_type():
+    class StrSub(str): ...
+
+    assert check_type("a", 1, int) == 1
+    assert check_type("a", 1, int, strict=True) == 1
+    assert check_type("a", 1, int, strict=False) == 1
+    assert check_type("a", "1", str) == "1"
+    assert check_type("a", StrSub("1"), str) == StrSub("1")
+    assert check_type("a", StrSub("1"), str, strict=False) == StrSub("1")
+    assert check_type("a", StrSub("1"), StrSub, strict=True) == StrSub("1")
+    with pytest.raises(TypeError):
+        check_type("a", 1, str)
+    with pytest.raises(TypeError):
+        check_type("a", 1.0, int)
+    with pytest.raises(TypeError):
+        check_type("a", StrSub("1"), str, strict=True)
+    with pytest.raises(TypeError):
+        check_type("a", "1", StrSub)
