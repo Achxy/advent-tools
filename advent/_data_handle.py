@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from __future__ import annotations
+
 from ._config_reader import CONFIGURATION, UnformattedPath, get_session_token
 from ._downloader import Downloader
 

@@ -24,12 +24,12 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from enum import UNIQUE, Enum, verify
+from enum import Enum
 from os import environ
 from pathlib import Path
-from tomllib import loads
 from typing import Any, TypeVar
 
+import tomli as tomllib
 from dotenv import dotenv_values
 from platformdirs import user_data_dir
 
@@ -64,7 +64,6 @@ class UnformattedPath:
         return path
 
 
-@verify(UNIQUE)
 class SupportedConfigurationFormats(Enum):
     AOC_CONFIGURATION_FILE = ".advent"
     PYPROJECT_TOML = "pyproject.toml"
@@ -85,7 +84,7 @@ class Configuration:
 
     def _populate(self, file: Path, format: SupportedConfigurationFormats):
         with open(file, "rt") as fp:
-            data = loads(fp.read())
+            data = tomllib.loads(fp.read())
             if format is format.PYPROJECT_TOML:
                 data = data.get("tool", {}).get("advent", {})
         self._config.update(data)

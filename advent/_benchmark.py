@@ -22,11 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from __future__ import annotations
+
 import time
-from typing import Callable, ParamSpec, TypeVar
+from typing import TYPE_CHECKING, Callable, TypeVar
+
+if TYPE_CHECKING:
+    from typing_extensions import ParamSpec
+
+    _P = ParamSpec("_P")
+else:
+    _P = TypeVar("_P")
+
 
 _R = TypeVar("_R")
-_P = ParamSpec("_P")
 
 
 def benchmark_and_print(func: Callable[_P, _R], *args: _P.args, **kwargs: _P.kwargs) -> _R:
