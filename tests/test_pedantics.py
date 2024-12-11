@@ -19,4 +19,5 @@ def test_check_if_can_be_well_formatted():
         check_if_can_be_well_formatted("djf {a} {n}", "", "")
     with pytest.raises(ValueError):
         check_if_can_be_well_formatted("{a}, 3042usd hbjaus8sdvjan al{n}kd", "a")
-    
+    with pytest.raises(ValueError):
+        check_if_can_be_well_formatted("{} {a}, lorem ipsum pq{b}rs", "a", "b", "c")
