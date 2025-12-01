@@ -176,4 +176,6 @@ def check_if_viable_date(year: int, day: int) -> None:
         days, remainder = divmod(total_seconds, 86400)
         hours, remainder = divmod(remainder, 3600)
         minutes, seconds = divmod(remainder, 60)
-        raise DateValidationError(f"Day {day} puzzle not yet released. Time remaining: {days}d {hours}h {minutes}m {seconds}s")
+        raise DateValidationError(
+            f"Day {day} puzzle not yet released. Time remaining: {days}d {hours}h {minutes}m {seconds}s"
+        )

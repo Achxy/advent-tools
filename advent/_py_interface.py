@@ -95,8 +95,12 @@ class Advent(FakeGenericForGetItemSupport[FakeType], metaclass=_InstantiatorFrom
         _slice_data.year = None
         _slice_data.day = None
 
-        _year: int = not_both_provided_but_one(year, slice_year, "Provide exactly one year through subclass kwargs or getitem syntax")
-        _day: int = not_both_provided_but_one(day, slice_day, "Provide exactly one day through subclass kwargs or getitem syntax")
+        _year: int = not_both_provided_but_one(
+            year, slice_year, "Provide exactly one year through subclass kwargs or getitem syntax"
+        )
+        _day: int = not_both_provided_but_one(
+            day, slice_day, "Provide exactly one day through subclass kwargs or getitem syntax"
+        )
 
         if not autorun:
             return

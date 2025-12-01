@@ -63,7 +63,9 @@ class Downloader:
         except httpx.HTTPStatusError as exc:
             status = exc.response.status_code
             if status == 400:
-                raise DownloadError("Bad request (HTTP 400). This often indicates an invalid or expired session token.") from exc
+                raise DownloadError(
+                    "Bad request (HTTP 400). This often indicates an invalid or expired session token."
+                ) from exc
             if status == 404:
                 raise DownloadError(f"Puzzle not found at {url}. The puzzle may not exist yet.") from exc
             if status == 500:
