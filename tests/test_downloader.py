@@ -41,7 +41,7 @@ class TestDownloader:
         respx.get(url).respond(status_code=400)
 
         dl = Downloader("invalid-session")
-        with pytest.raises(DownloadError, match="Invalid session token"):
+        with pytest.raises(DownloadError, match=r"Bad request.*invalid or expired session token"):
             dl.get_content(url)
 
     @respx.mock

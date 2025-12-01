@@ -1,7 +1,6 @@
 """Tests for the _benchmark module."""
 
-import io
-import sys
+import pytest
 
 from advent._benchmark import benchmark_and_print
 
@@ -14,21 +13,16 @@ class TestBenchmarkAndPrint:
         result = benchmark_and_print(add, 2, 3)
         assert result == 5
 
-    def test_prints_timing_info(self) -> None:
+    def test_prints_timing_info(self, capsys: pytest.CaptureFixture[str]) -> None:
         def simple() -> str:
             return "hello"
 
-        captured = io.StringIO()
-        sys.stdout = captured
-        try:
-            benchmark_and_print(simple)
-        finally:
-            sys.stdout = sys.__stdout__
+        benchmark_and_print(simple)
+        captured = capsys.readouterr()
 
-        output = captured.getvalue()
-        assert "simple" in output
-        assert "ms" in output
-        assert "hello" in output
+        assert "simple" in captured.out
+        assert "ms" in captured.out
+        assert "hello" in captured.out
 
     def test_handles_kwargs(self) -> None:
         def greet(name: str, greeting: str = "Hello") -> str:
