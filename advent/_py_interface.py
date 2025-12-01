@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import threading
 from collections.abc import Callable
 from typing import Any
 
@@ -30,6 +31,9 @@ from ._data_handle import get, get_example_data, getch
 from ._exceptions import DataNotFoundError
 from ._pedantics import not_both_provided_but_one
 from ._typeshack import FakeGenericForGetItemSupport, FakeType
+
+# Thread-local storage for year/day passed via slice syntax
+_slice_data: threading.local = threading.local()
 
 
 class _InstantiatorFromSlice(type):
@@ -40,14 +44,11 @@ class _InstantiatorFromSlice(type):
     alternative to `class Solution(Advent, year=2022, day=1)`.
     """
 
-    __year__: int | None = None
-    __day__: int | None = None
-
     def __getitem__(cls, date: slice) -> Callable[..., type]:
         if date.step is not None:
             raise ValueError(f"Use {cls.__name__}[YEAR:DAY] syntax, not {cls.__name__}[YEAR:DAY:STEP]")
-        cls.__year__ = date.start
-        cls.__day__ = date.stop
+        _slice_data.year = date.start
+        _slice_data.day = date.stop
         return cls
 
 
@@ -88,12 +89,14 @@ class Advent(FakeGenericForGetItemSupport[FakeType], metaclass=_InstantiatorFrom
     ) -> None:
         super().__init_subclass__(**kwargs)
 
-        _year: int = not_both_provided_but_one(year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax")
-        _day: int = not_both_provided_but_one(day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax")
+        # Get thread-local slice data and clear it
+        slice_year = getattr(_slice_data, "year", None)
+        slice_day = getattr(_slice_data, "day", None)
+        _slice_data.year = None
+        _slice_data.day = None
 
-        # Reset class attributes for next use
-        cls.__year__ = None
-        cls.__day__ = None
+        _year: int = not_both_provided_but_one(year, slice_year, "Provide exactly one year through subclass kwargs or getitem syntax")
+        _day: int = not_both_provided_but_one(day, slice_day, "Provide exactly one day through subclass kwargs or getitem syntax")
 
         if not autorun:
             return
