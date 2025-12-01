@@ -7,7 +7,6 @@ version = "1.0.0b1"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
-    { name = "importlib-resources", marker = "python_full_version < '3.11'" },
     { name = "platformdirs" },
     { name = "python-dotenv" },
     { name = "tomli", marker = "python_full_version < '3.11'" },
@@ -27,7 +26,6 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.0" },
-    { name = "importlib-resources", marker = "python_full_version < '3.11'", specifier = ">=6.0.0" },
     { name = "platformdirs", specifier = ">=4.3.6" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0.0" },
@@ -237,15 +235,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d/idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9", size = 190490 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3", size = 70442 },
-]
-
-[[package]]
-name = "importlib-resources"
-version = "6.5.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cf/8c/f834fbf984f691b4f7ff60f50b514cc3de5cc08abfc3295564dd89c5e2e7/importlib_resources-6.5.2.tar.gz", hash = "sha256:185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c", size = 44693 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/ed/1f1afb2e9e7f38a545d628f864d562a5ae64fe6f7a10e28ffb9b185b4e89/importlib_resources-6.5.2-py3-none-any.whl", hash = "sha256:789cfdc3ed28c78b67a06acb8126751ced69a3d5f79c095a98298cd8a760ccec", size = 37461 },
 ]
 
 [[package]]
