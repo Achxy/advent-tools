@@ -42,7 +42,7 @@ exclude = [".venv/"]
 [tool.hatch.build.targets.wheel]
 packages = ["advent/"]
 
-[tool.pyright]
+[tool.basedpyright]
 venv = ".venv"
 venvPath = "."
 reportUnnecessaryTypeIgnoreComment = "warning"
@@ -91,5 +91,5 @@ test = [
 ]
 lint = [
     "ruff>=0.8.0",
-    "pyright>=1.1.390",
+    "basedpyright>=1.22.0",
 ]
