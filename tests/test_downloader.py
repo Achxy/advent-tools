@@ -1,5 +1,6 @@
 """Tests for the _downloader module."""
 
+# respx library has incomplete type stubs for the respond() method
 # pyright: reportUnknownMemberType=false
 import httpx
 import pytest
