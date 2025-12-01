@@ -24,7 +24,6 @@ SOFTWARE.
 
 import sys
 from enum import Enum, unique
-from functools import cache
 from os import environ
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, TypeVar, cast
@@ -137,7 +136,6 @@ class Configuration:
         )
 
 
-@cache
 def get_configuration() -> Configuration:
     """Get the configuration, lazily loaded and cached."""
     return Configuration.from_supported_configuration(Path.cwd(), SupportedConfigurationFormats)
