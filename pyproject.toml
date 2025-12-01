@@ -28,9 +28,8 @@ dependencies = [
     "platformdirs>=4.3.6",
     "python-dotenv>=1.0.1",
     "httpx>=0.28.0",
-    # Python < 3.11 backports
+    # Python < 3.11 backport for tomllib
     "tomli>=2.0.0; python_version < '3.11'",
-    "importlib_resources>=6.0.0; python_version < '3.11'",
 ]
 
 [project.urls]
