@@ -14,14 +14,23 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Utilities",
     "Typing :: Typed"
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "platformdirs>=4.3.6",
     "python-dotenv>=1.0.1",
-    "requests>=2.32.3",
+    "httpx>=0.28.0",
+    # Python < 3.11 backports
+    "tomli>=2.0.0; python_version < '3.11'",
+    "importlib_resources>=6.0.0; python_version < '3.11'",
 ]
 
 [project.urls]
@@ -39,12 +48,37 @@ venv = ".venv"
 venvPath = "."
 reportUnnecessaryTypeIgnoreComment = "warning"
 typeCheckingMode = "strict"
+pythonVersion = "3.10"
+include = ["advent", "tests"]
+exclude = ["advent/x.py", ".venv"]
 
-[tool.black]
+[tool.ruff]
 line-length = 125
+target-version = "py310"
+exclude = ["advent/x.py"]  # scratch file
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+    "PTH",    # flake8-use-pathlib
+    "RUF",    # ruff-specific rules
+]
+ignore = ["E501"]  # line length handled by formatter
+
+[tool.ruff.lint.isort]
+known-first-party = ["advent"]
+
+[tool.ruff.format]
+quote-style = "double"
 
 [tool.uv]
 package = true
@@ -53,10 +87,10 @@ package = true
 dev = []
 test = [
     "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "respx>=0.22.0",
 ]
-
 lint = [
-    "black>=24.10.0",
-    "isort>=5.13.2",
+    "ruff>=0.8.0",
     "pyright>=1.1.390",
 ]
