@@ -26,6 +26,8 @@ from datetime import datetime, timedelta, timezone
 from functools import partial
 from typing import Any, TypeVar
 
+from ._exceptions import DateValidationError
+
 _T = TypeVar("_T")
 _T2 = TypeVar("_T2")
 
@@ -38,60 +40,71 @@ now = partial(datetime.now, tz=UTC_5)
 def not_both_provided_but_one(a: _T | None, b: _T2 | None, msg: str = "Provide exactly one value") -> _T | _T2:
     if (a is None) is (b is None):
         raise ValueError(msg)
-    return a if a is not None else b  # type: ignore (typecheckers don't understand this)
+    return a if a is not None else b  # type: ignore[return-value]
 
 
-def check_type(varname: str, value: Any, expected: type[_T], strict: bool = False) -> _T:
+def check_type(varname: str, value: Any, expected: type[_T], *, strict: bool = False) -> _T:
     if not isinstance(value, expected):
-        raise TypeError(f"{varname} must be of type {expected!r} or it's subclasses, not {type(value)!r}")
+        raise TypeError(f"{varname!r} must be of type {expected.__name__!r}, not {type(value).__name__!r}")
     if strict and type(value) is not expected:
-        raise TypeError(f"{varname} must be of strictly type {expected!r}, not {type(value)!r}")
+        raise TypeError(f"{varname!r} must be strictly type {expected.__name__!r}, not {type(value).__name__!r}")
     return value
 
 
-def check_if_can_be_well_formatted(unformatted: str, *args: str):
-    # Make sure side-effectless
+def check_if_can_be_well_formatted(unformatted: str, *args: str) -> None:
+    """Validate that a format string contains the required placeholders."""
     check_type("unformatted", unformatted, str, strict=True)
     try:
-        unformatted.format(**{i: str() for i in args})
+        unformatted.format(**dict.fromkeys(args, ""))
     except KeyError as exc:
-        raise ValueError(f"Unformatted string has missing keys (string: {unformatted})") from exc
+        raise ValueError(f"Unformatted string has missing keys (string: {unformatted!r})") from exc
     except IndexError as exc:
-        raise ValueError(f"No index-based formatting allowed for this context (string: {unformatted})") from exc
+        raise ValueError(f"No index-based formatting allowed for this context (string: {unformatted!r})") from exc
 
 
 def check_if_valid_year(year: int) -> int:
+    """Validate that a year is within the valid AOC range."""
     check_type("year", year, int)
     current_year = now().year
     if year < START_OF_AOC_YEAR:
-        raise ValueError(f"Current year is {current_year}, which is before the start of Advent of Code: {START_OF_AOC_YEAR}")
-    if year > now().year:
-        raise ValueError(f"{year} is in the future, current year is {current_year}")
+        raise DateValidationError(f"Year {year} is before the start of Advent of Code ({START_OF_AOC_YEAR})")
+    if year > current_year:
+        raise DateValidationError(f"Year {year} is in the future (current year: {current_year})")
     return year
 
 
 def check_if_valid_day(day: int) -> int:
+    """Validate that a day is within the valid AOC range (1-25)."""
     check_type("day", day, int)
     if day > MAX_AOC_DAYS:
-        raise ValueError(f"Day {day} is greater than the maximum number of days in Advent of Code: {MAX_AOC_DAYS}")
+        raise DateValidationError(f"Day {day} exceeds maximum AOC days ({MAX_AOC_DAYS})")
     if day < 1:
-        raise ValueError(f"Day {day} is less than 1")
+        raise DateValidationError(f"Day {day} is less than 1")
     return day
 
 
-def check_if_viable_date(year: int, day: int):
+def check_if_viable_date(year: int, day: int) -> None:
+    """Validate that a year/day combination is available for fetching."""
     check_if_valid_day(day)
     check_if_valid_year(year)
-    current_year, current_day = now().year, now().day
-    is_december = now().month == 12
+
+    current_time = now()
+    current_year = current_time.year
+    is_december = current_time.month == 12
+
+    # Past years are always available
     if year < current_year:
         return
+
+    # Current year but not December yet
     if not is_december:
-        delta = 12 - now().month
-        raise ValueError(f"Advent of Code only happens in December, you'll have to wait {delta} more months")
-    if day > current_day + 1:
-        raise ValueError(f"Day {day} is in the future, current available day is {current_day}")
-    if not now() >= datetime(year, 12, day, tzinfo=UTC_5):
-        delta = datetime(year, 12, day, tzinfo=UTC_5) - now()
-        fmt = f"{delta.seconds // 3600} hours, {(delta.seconds // 60) % 60} minutes and {delta.seconds % 60} seconds"
-        raise ValueError(f"Advent of Code for day {day} has not started yet ({fmt} left)")
+        months_to_wait = 12 - current_time.month
+        raise DateValidationError(f"Advent of Code only runs in December. Wait {months_to_wait} more month(s).")
+
+    # Check if the specific day is available
+    puzzle_release = datetime(year, 12, day, tzinfo=UTC_5)
+    if current_time < puzzle_release:
+        delta = puzzle_release - current_time
+        hours, remainder = divmod(delta.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        raise DateValidationError(f"Day {day} puzzle not yet released. Time remaining: {hours}h {minutes}m {seconds}s")

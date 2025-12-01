@@ -20,9 +20,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Type stubs to make Advent[YEAR:DAY] syntax work with type checkers.
+
+The Advent class uses a metaclass that overrides __getitem__ to accept
+slice syntax for date specification. This module provides type hints
+to make this pattern compatible with static analysis tools.
+
+Without this, type checkers would complain about `Advent[2022:1]` since
+the default Generic.__class_getitem__ expects type parameters, not slices.
 """
 
 from typing import Generic, TypeVar
 
+# Fake type variable used to satisfy Generic's requirement for a type parameter
 FakeType = TypeVar("FakeType")
+
+# Alias for Generic that allows our __getitem__ override to work
 FakeGenericForGetItemSupport = Generic

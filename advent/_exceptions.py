@@ -22,18 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import time
-from collections.abc import Callable
-from typing import ParamSpec, TypeVar
 
-_R = TypeVar("_R")
-_P = ParamSpec("_P")
+class AdventError(Exception):
+    """Base exception for advent-tools."""
 
 
-def benchmark_and_print(func: Callable[_P, _R], *args: _P.args, **kwargs: _P.kwargs) -> _R:
-    """Execute a function and print its execution time and result."""
-    start = time.perf_counter()
-    result = func(*args, **kwargs)
-    elapsed_ms = (time.perf_counter() - start) * 1000
-    print(f"{func.__name__} took {elapsed_ms:.6f} ms → {result}")
-    return result
+class ConfigurationError(AdventError):
+    """Raised when configuration is invalid or missing."""
+
+
+class SessionTokenError(AdventError):
+    """Raised when the AOC session token is missing or invalid."""
+
+
+class DateValidationError(AdventError):
+    """Raised when year/day validation fails."""
+
+
+class DataNotFoundError(AdventError):
+    """Raised when offline data is not found."""
+
+
+class DownloadError(AdventError):
+    """Raised when downloading puzzle input fails."""

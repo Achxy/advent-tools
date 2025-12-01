@@ -22,6 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from ._exceptions import (
+    AdventError,
+    ConfigurationError,
+    DataNotFoundError,
+    DateValidationError,
+    DownloadError,
+    SessionTokenError,
+)
 from ._py_interface import Advent
 
-__all__ = ("Advent",)
+__all__ = (
+    "Advent",
+    "AdventError",
+    "ConfigurationError",
+    "DataNotFoundError",
+    "DateValidationError",
+    "DownloadError",
+    "SessionTokenError",
+)
