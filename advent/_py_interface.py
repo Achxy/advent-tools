@@ -88,9 +88,8 @@ class Advent(FakeGenericForGetItemSupport[FakeType], metaclass=_InstantiatorFrom
     ) -> None:
         super().__init_subclass__(**kwargs)
 
-        msg = "Provide exactly one {arg} through subclass kwargs or getitem syntax"
-        _year: int = not_both_provided_but_one(year, cls.__year__, msg.format(arg="year"))
-        _day: int = not_both_provided_but_one(day, cls.__day__, msg.format(arg="day"))
+        _year: int = not_both_provided_but_one(year, cls.__year__, "Provide exactly one year through subclass kwargs or getitem syntax")
+        _day: int = not_both_provided_but_one(day, cls.__day__, "Provide exactly one day through subclass kwargs or getitem syntax")
 
         # Reset class attributes for next use
         cls.__year__ = None

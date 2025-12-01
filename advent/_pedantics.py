@@ -172,6 +172,8 @@ def check_if_viable_date(year: int, day: int) -> None:
     puzzle_release = datetime(year, 12, day, tzinfo=UTC_5)
     if current_time < puzzle_release:
         delta = puzzle_release - current_time
-        hours, remainder = divmod(delta.seconds, 3600)
+        total_seconds = int(delta.total_seconds())
+        days, remainder = divmod(total_seconds, 86400)
+        hours, remainder = divmod(remainder, 3600)
         minutes, seconds = divmod(remainder, 60)
-        raise DateValidationError(f"Day {day} puzzle not yet released. Time remaining: {hours}h {minutes}m {seconds}s")
+        raise DateValidationError(f"Day {day} puzzle not yet released. Time remaining: {days}d {hours}h {minutes}m {seconds}s")
