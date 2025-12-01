@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from functools import partial
 from typing import Any, TypeVar
@@ -32,9 +33,61 @@ _T = TypeVar("_T")
 _T2 = TypeVar("_T2")
 
 START_OF_AOC_YEAR = 2015
-MAX_AOC_DAYS = 25
 UTC_5 = timezone(timedelta(hours=-5))
 now = partial(datetime.now, tz=UTC_5)
+
+
+@dataclass(frozen=True, slots=True)
+class YearDayRange:
+    """Defines the maximum number of days for a range of AOC years.
+
+    Attributes:
+        start_year: First year this range applies to (inclusive).
+        end_year: Last year this range applies to (inclusive), or None for unbounded.
+        max_days: Maximum number of puzzle days available in this year range.
+    """
+
+    start_year: int
+    end_year: int | None
+    max_days: int
+
+    def __post_init__(self) -> None:
+        if self.end_year is not None and self.start_year > self.end_year:
+            raise ValueError(f"start_year ({self.start_year}) cannot be greater than end_year ({self.end_year})")
+        if self.max_days < 1:
+            raise ValueError(f"max_days must be at least 1, got {self.max_days}")
+
+    def contains_year(self, year: int) -> bool:
+        """Check if the given year falls within this range."""
+        if year < self.start_year:
+            return False
+        if self.end_year is None:
+            return True
+        return year <= self.end_year
+
+
+AOC_DAY_RANGES: tuple[YearDayRange, ...] = (
+    YearDayRange(start_year=2015, end_year=2024, max_days=25),
+    YearDayRange(start_year=2025, end_year=None, max_days=12),
+)
+
+
+def get_max_days_for_year(year: int) -> int:
+    """Get the maximum number of puzzle days for a given AOC year.
+
+    Args:
+        year: The AOC year to look up.
+
+    Returns:
+        The maximum number of days available for that year.
+
+    Raises:
+        ValueError: If no range is defined for the given year.
+    """
+    for year_range in AOC_DAY_RANGES:
+        if year_range.contains_year(year):
+            return year_range.max_days
+    raise ValueError(f"No day range defined for year {year}")
 
 
 def not_both_provided_but_one(a: _T | None, b: _T2 | None, msg: str = "Provide exactly one value") -> _T | _T2:
@@ -73,20 +126,34 @@ def check_if_valid_year(year: int) -> int:
     return year
 
 
-def check_if_valid_day(day: int) -> int:
-    """Validate that a day is within the valid AOC range (1-25)."""
+def check_if_valid_day(day: int, *, year: int) -> int:
+    """Validate that a day is within the valid AOC range for a given year.
+
+    Args:
+        day: The day number to validate.
+        year: The year to determine the max days allowed.
+
+    Returns:
+        The validated day number.
+
+    Raises:
+        DateValidationError: If the day is out of range.
+        TypeError: If day is not an integer.
+    """
     check_type("day", day, int)
-    if day > MAX_AOC_DAYS:
-        raise DateValidationError(f"Day {day} exceeds maximum AOC days ({MAX_AOC_DAYS})")
     if day < 1:
         raise DateValidationError(f"Day {day} is less than 1")
+
+    max_days = get_max_days_for_year(year)
+    if day > max_days:
+        raise DateValidationError(f"Day {day} exceeds maximum AOC days ({max_days})")
     return day
 
 
 def check_if_viable_date(year: int, day: int) -> None:
     """Validate that a year/day combination is available for fetching."""
-    check_if_valid_day(day)
     check_if_valid_year(year)
+    check_if_valid_day(day, year=year)
 
     current_time = now()
     current_year = current_time.year
