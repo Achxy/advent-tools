@@ -61,10 +61,13 @@ class Downloader:
             response.raise_for_status()
             return response.text
         except httpx.HTTPStatusError as exc:
-            if exc.response.status_code == 400:
-                raise DownloadError("Invalid session token. Please check your AOC_SESSION value.") from exc
-            if exc.response.status_code == 404:
+            status = exc.response.status_code
+            if status == 400:
+                raise DownloadError("Bad request (HTTP 400). This often indicates an invalid or expired session token.") from exc
+            if status == 404:
                 raise DownloadError(f"Puzzle not found at {url}. The puzzle may not exist yet.") from exc
-            raise DownloadError(f"HTTP error {exc.response.status_code}: {exc}") from exc
+            if status == 500:
+                raise DownloadError("Server error (HTTP 500). The Advent of Code server may be overloaded.") from exc
+            raise DownloadError(f"HTTP error {status}: {exc}") from exc
         except httpx.RequestError as exc:
             raise DownloadError(f"Network error while fetching {url}: {exc}") from exc
